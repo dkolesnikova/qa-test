@@ -9,7 +9,7 @@
 ###  Тесты
 
 <p align="center">
-<img title="Allure Tests" src="images/screens/Allure_Report2.png">
+![Картинка 2](src/images/screens/Allure_Report2.png)
 </p>
 
 
