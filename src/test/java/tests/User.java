@@ -15,7 +15,7 @@ public class User {
         Faker faker = new Faker();
         String fakeEmail = faker.internet().emailAddress();
         String fakeName = faker.name().firstName();
-User.builder().build();
+        User.builder().build();
         return User.builder()
                 .email(fakeEmail)
                 .name(fakeName)

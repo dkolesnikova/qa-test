@@ -5,7 +5,7 @@ import org.aeonbits.owner.Config;
 @Config.Sources({
         "classpath:locale.properties"
 })
-public interface WebDriverConfig extends Config{
+public interface WebDriverConfig extends Config {
     @Key("browserName")
     @DefaultValue("chrome")
     String getBrowserName();

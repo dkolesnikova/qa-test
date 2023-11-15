@@ -1,8 +1,10 @@
 package page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import tests.User;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class RegistrationPage {
     public SelenideElement
@@ -32,5 +34,10 @@ public class RegistrationPage {
                 .sendDataButton.click();
         registrationPage
                 .dataAddedButton.click();
+    }
+
+    public void check(Integer number, String mail, String name, String gender, String V1,String v2){
+        $x("//tr["+number+"]//td[contains(text(), '"+mail+"')]/../td[contains(text(), '"+name+"')]/../" +
+                "td[contains(text(), '"+gender+"')]/../td[contains(text(), '"+V1+"')]/../td[contains(text(), '"+v2+"')]/..").shouldBe(Condition.exist);
     }
 }

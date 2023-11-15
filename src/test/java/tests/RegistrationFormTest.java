@@ -16,6 +16,7 @@ public class RegistrationFormTest extends TestBase {
     Faker faker = new Faker();
     String fakeEmail = faker.internet().emailAddress();
     String fakeName = faker.name().firstName();
+
     @BeforeEach
     public void commonSetUp() {
         authorizationPage
@@ -25,6 +26,7 @@ public class RegistrationFormTest extends TestBase {
         authorizationPage
                 .loginButton.click();
     }
+
     @Test
     public void successfulEmailAndNameInputTest() {
         registrationPage
@@ -48,13 +50,7 @@ public class RegistrationFormTest extends TestBase {
         registrationPage
                 .dataAddedButton.click();
         registrationPage
-                .dataTable.shouldHave(
-                        text(fakeEmail),
-                        text(fakeName),
-                        text("Мужской"),
-                        text("1.1, 1.2"),
-                        text("2.3")
-                );
+                .check(1, fakeEmail, fakeName, "Мужской", "1.1, 1.2", "2.3");
     }
 
     @Test
@@ -74,14 +70,30 @@ public class RegistrationFormTest extends TestBase {
         registrationPage
                 .sendDataButton.click();
         registrationPage
-                .dataTable.shouldHave(
-                        text("TEST@protei.ru"),
-                        text("КИВИ"),
-                        text("Мужской"),
-                        text("1.1, 1.2"),
-                        text("2.1")
-                );
+                .check(1, "TEST@protei.ru", "КИВИ", "Мужской", "1.1, 1.2", "2.1");
     }
+    @Test
+    public void registrationWithSpecialSymbolTest() {
+        registrationPage
+                .mailField.setValue("!@#$%^&@.com");
+        registrationPage
+                .nameField.setValue("!@#$%^");
+        registrationPage
+                .genderField.selectOptionByValue("Мужской");
+        registrationPage
+                .variant11.click();
+        registrationPage
+                .variant12.click();
+        registrationPage
+                .variant21.click();
+        registrationPage
+                .sendDataButton.click();
+        registrationPage
+                .dataAddedButton.click();
+        registrationPage
+                .check(1, "!@#$%^&@.com", "!@#$%^", "Мужской", "1.1, 1.2", "2.1");
+    }
+
     @Test
     public void registrationWithoutNameFieldTest() {
         registrationPage
@@ -99,7 +111,7 @@ public class RegistrationFormTest extends TestBase {
     }
 
     @Test
-    public void registrationWithoutEmailFieldTest(){
+    public void registrationWithoutEmailFieldTest() {
         registrationPage
                 .nameField.setValue(fakeName);
         registrationPage
@@ -115,7 +127,7 @@ public class RegistrationFormTest extends TestBase {
     }
 
     @Test
-    public void checkTheMinimumSizeOfFieldMailTest(){
+    public void checkTheMinimumSizeOfFieldMailTest() {
         registrationPage
                 .mailField.setValue("a@b.com");
         registrationPage
@@ -129,19 +141,14 @@ public class RegistrationFormTest extends TestBase {
         registrationPage
                 .dataAddedButton.click();
         registrationPage
-        .dataTable.shouldHave(
-                text("a@b.com"),
-                text(fakeName),
-                text("Мужской"),
-                text("1.2"),
-                text("2.3")
-        );
-
+                .check(1, "a@b.com", fakeName, "Мужской", "1.2", "2.3");
     }
+
     @Test
-    public void checkTheMaximumSizeOfFieldMailTest(){
+    public void checkTheMaximumSizeOfFieldMailTest() {
+        String mail = "a".repeat(300) + "@b.com";
         registrationPage
-                .mailField.setValue("a".repeat(300) + "@b.com");
+                .mailField.setValue(mail);
         registrationPage
                 .nameField.setValue(fakeName);
         registrationPage
@@ -155,17 +162,11 @@ public class RegistrationFormTest extends TestBase {
         registrationPage
                 .dataAddedButton.click();
         registrationPage
-                .dataTable.shouldHave(
-                        text("a".repeat(300) + "@b.com"),
-                        text(fakeName),
-                        text("Мужской"),
-                        text("1.2"),
-                        text("2.3")
-                );
-
+                .check(1, mail, fakeName, "Мужской", "1.2", "2.3");
     }
+
     @Test
-    public void test7() {
+    public void registrationWithoutASpecialCharacterTest() {
         registrationPage
                 .mailField.setValue("testprotei.ru");
         registrationPage
@@ -181,8 +182,9 @@ public class RegistrationFormTest extends TestBase {
         registrationPage
                 .emailFormatError.shouldHave(text("Неверный формат E-Mail"));
     }
+
     @Test
-    public void test8() {
+    public void registrationWithShortFieldNameTest () {
         registrationPage
                 .mailField.setValue(fakeEmail);
         registrationPage
@@ -200,22 +202,10 @@ public class RegistrationFormTest extends TestBase {
         registrationPage
                 .dataAddedButton.click();
         registrationPage
-                .dataTable.shouldHave(
-                        text(fakeEmail),
-                        text("a"),
-                        text("Мужской"),
-                        text("1.1, 1.2"),
-                        text("2.1")
-                );
-    }
-    @Test
-    public void сreateMultipleUsersTest() {
-        User user1 = randomUser();
-        User user2 = randomUser();
-registrationPage.sendRequiredFields(user1);
-registrationPage.sendRequiredFields(user2);
+                .check(1, fakeEmail, "a", "Мужской", "1.1, 1.2", "2.1");
 
     }
+
     @Test
     public void checkTheFormativityOfThePageTest() {
         User user1 = randomUser();
@@ -229,19 +219,19 @@ registrationPage.sendRequiredFields(user2);
         User user9 = randomUser();
         User user10 = randomUser();
         User user11 = randomUser();
-registrationPage.sendRequiredFields(user1);
-registrationPage.sendRequiredFields(user2);
-registrationPage.sendRequiredFields(user3);
-registrationPage.sendRequiredFields(user4);
-registrationPage.sendRequiredFields(user5);
-registrationPage.sendRequiredFields(user6);
-registrationPage.sendRequiredFields(user7);
-registrationPage.sendRequiredFields(user8);
-registrationPage.sendRequiredFields(user9);
-registrationPage.sendRequiredFields(user10);
-registrationPage.sendRequiredFields(user11);
-registrationPage
-        .mailField.shouldBe(visible);
+        registrationPage.sendRequiredFields(user1);
+        registrationPage.sendRequiredFields(user2);
+        registrationPage.sendRequiredFields(user3);
+        registrationPage.sendRequiredFields(user4);
+        registrationPage.sendRequiredFields(user5);
+        registrationPage.sendRequiredFields(user6);
+        registrationPage.sendRequiredFields(user7);
+        registrationPage.sendRequiredFields(user8);
+        registrationPage.sendRequiredFields(user9);
+        registrationPage.sendRequiredFields(user10);
+        registrationPage.sendRequiredFields(user11);
+        registrationPage
+                .mailField.shouldBe(visible);
     }
 }
 

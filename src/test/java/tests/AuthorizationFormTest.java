@@ -3,10 +3,12 @@ package tests;
 import com.codeborne.selenide.Condition;
 import org.junit.jupiter.api.Test;
 import page.AuthorizationPage;
+
 public class AuthorizationFormTest extends TestBase {
     AuthorizationPage authorizationPage = new AuthorizationPage();
     String email = "test@protei.ru";
     String password = "test";
+
     @Test
     public void successfulAuthorizationClickTest() {
         authorizationPage
@@ -18,6 +20,7 @@ public class AuthorizationFormTest extends TestBase {
         authorizationPage
                 .inputsPage.shouldBe(Condition.visible);
     }
+
     @Test
     void authorizationWithoutPasswordFieldTest() {
         authorizationPage
@@ -37,10 +40,11 @@ public class AuthorizationFormTest extends TestBase {
         authorizationPage
                 .emailFormatErrorButton.shouldHave(Condition.text("Неверный формат E-Mail"));
     }
+
     @Test
     void authorizationWithSpaceInEmailFieldTest() {
         authorizationPage
-                .loginEmail.setValue(" "+email);
+                .loginEmail.setValue(" " + email);
         authorizationPage
                 .loginPassword.setValue(password);
         authorizationPage
